@@ -1679,7 +1679,7 @@
           } else {
             // multiple choice mode (unchanged)
             queryContent +=
-              "\n\nPROVIDE ONLY A ONE-LETTER ANSWER THAT'S IT NOTHING ELSE (A, B, C, D, or E).";
+              "\n\nPROVIDE ONLY A ONE-LETTER ANSWER THAT'S IT NOTHING ELSE (A, B, C, or D).";
             if (excludedAnswers.length > 0)
               queryContent += `\n\nDo not pick letter ${excludedAnswers.join(
                 ", "
@@ -1702,7 +1702,7 @@
 
             let answer = null;
             if (willRandom) {
-              const letters = ["A", "B", "C", "D", "E"].filter(
+              const letters = ["A", "B", "C", "D"].filter(
                 (l) => !excludedAnswers.includes(l)
               );
               const options = document.querySelectorAll('[role="radio"]');
@@ -1769,7 +1769,7 @@
             }
 
             if (
-              ["A", "B", "C", "D", "E"].includes(normalized) &&
+              ["A", "B", "C", "D"].includes(normalized) &&
               !excludedAnswers.includes(normalized)
             ) {
               const options = document.querySelectorAll('[role="radio"]');
