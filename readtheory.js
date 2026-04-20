@@ -1867,32 +1867,25 @@
       };
 
       try {
-        while (this.isRunning) {
-          const cont = await attemptOnce();
-          if (!this.isRunning) break;
-          if (!cont) break;
-          const waitMs = Number(this.getMCWait()) || this.defaults.mc_wait;
-          await new Promise((r) => setTimeout(r, waitMs));
+        if (this.isRunning) {
+          await attemptOnce();
         }
       } finally {
-        if (!this._stoppedByWrite) {
-          this.isRunning = false;
-          const spinnerEl = document.getElementById("ah-spinner");
-          if (spinnerEl) spinnerEl.style.display = "none";
-          try {
-            await this.playVideoOnce(this.getUrl("icons/gotosleep.webm"));
-          } catch (e) {}
-          this.setEyeToSleep();
-          try {
-            console.log("[smArt] stopped");
-          } catch (e) {}
-          const label = document.getElementById("getAnswerButtonText");
-          if (label) label.textContent = "work smArt-er";
-          const btn = document.getElementById("getAnswerButton");
-          if (btn) btn.classList.remove("running");
-        } else {
-          this._stoppedByWrite = false;
-        }
+        if (!this.stoppedByWrite) this.isRunning = false;
+      
+        const spinnerEl = document.getElementById("ah-spinner");
+        if (spinnerEl) spinnerEl.style.display = "none";
+      
+        try {
+          await this.playVideoOnce(this.getUrl("icons/gotosleep.webm"));
+        } catch (e) {}
+        this.setEyeToSleep();
+      
+        const label = document.getElementById("getAnswerButtonText");
+        if (label) label.textContent = "work smArt-er";
+      
+        const btn = document.getElementById("getAnswerButton");
+        if (btn) btn.classList.remove("running");
       }
     }
   }
