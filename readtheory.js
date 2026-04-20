@@ -1708,6 +1708,7 @@
               const options = document.querySelectorAll('[role="radio"]');
               let chosenLetter = null;
               if (options && options.length > 0) {
+                console.log(letters)
                 const available = letters
                   .map((l) => l.charCodeAt(0) - "A".charCodeAt(0))
                   .filter((i) => options[i]);
