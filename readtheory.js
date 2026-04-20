@@ -1741,17 +1741,13 @@
 
             if (!this.isRunning) return false;
 
-            const raw = String(answer || "");
+            const raw = String(answer || "").trim().toUpperCase();
             let normalized = "";
 
-            // find the first A-D/a-d character anywhere in the model output (whitelist)
-            const firstLetterMatch = raw.match(/[A-Da-d]/);
-            if (firstLetterMatch && firstLetterMatch[0]) {
-              normalized = firstLetterMatch[0].toUpperCase();
-            } else {
-              // fallback: strip everything except A-D letters and take the first (if any)
-              const cleaned = raw.replace(/[^A-Da-d]/g, "").toUpperCase();
-              normalized = cleaned ? cleaned.charAt(0) : "";
+            if (/^[ABCD]$/.test(raw)) {
+              normalized = raw;
+            } else if (/^\(?([ABCD])\)?[.)]?$/.test(raw)) {
+              normalized = raw.match(/[ABCD]/)[0];
             }
 
             const answerContainerEl =
