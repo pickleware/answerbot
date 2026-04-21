@@ -505,7 +505,7 @@
           }
   
           const questionContainer =
-            document.querySelector("student-quiz-page__question")
+            document.querySelector("div.student-quiz-page__question")
           let questionContent = "";
           if (questionContainer) {
             const questionParent = questionContainer.querySelectorAll("p");
