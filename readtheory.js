@@ -576,6 +576,7 @@
   
           if (!response.ok) {
             const text = await response.text().catch(() => "");
+            console.log(text)
             const status = response.status;
             const isQuotaOrRate =
               /quota|exceeded|rate limit|429/i.test(text) ||
