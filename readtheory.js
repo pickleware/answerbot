@@ -495,27 +495,32 @@
   
       async fetchArticleContent() {
         try {
-          const articleContainer = document.querySelector(
-            ".student-quiz-page__description-wrapper, .description-wrapper"
-          );
+          const titleElement = document.querySelector("h2.quiz-header-title");
+          const articleContainer = document.querySelector("div.description-wrapper");
+          const questionContainer = document.querySelector(".student-quiz-page__question");
       
-          const questionContainer = document.querySelector(
-            ".student-quiz-page__question"
-          );
+          const titleContent = titleElement ? titleElement.textContent.trim() : "";
       
-          const articleContent = articleContainer
-            ? articleContainer.innerText.trim()
-            : "";
+          let articleContent = "";
+          if (articleContainer) {
+            const paragraphs = articleContainer.querySelectorAll("p");
+            articleContent = Array.from(paragraphs)
+              .map((p) => p.textContent.trim())
+              .filter(Boolean)
+              .join(" ");
+          }
       
-          const questionContent = questionContainer
-            ? questionContainer.innerText.trim()
-            : "";
+          let questionContent = "";
+          if (questionContainer) {
+            questionContent = questionContainer.textContent.trim();
+          }
       
-          const combinedContent = `${articleContent}\n\n${questionContent}`.trim();
+          const combinedContent =
+            `${titleContent}\n\n${articleContent}\n\n${questionContent}`.trim();
+      
           this.cachedArticle = combinedContent;
           return combinedContent;
         } catch (err) {
-          console.error("fetchArticleContent error:", err);
           return "";
         }
       }
