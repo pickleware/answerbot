@@ -507,9 +507,12 @@
           const questionContainer =
             document.querySelector("student-quiz-page__question")
           let questionContent = "";
-          if (questionContainer)
-            questionContent = questionContainer.firstChild.textContent.trim();
-            console.log(questionContent)
+          if (questionContainer) {
+            const questionParent = questionContainer.querySelectorAll("p");
+            questionContent = Array.from(questionParent)
+            .map((p) => p.textContent.trim())
+            .join(" ");
+          }
   
           const combinedContent = `${articleContent}\n\n${questionContent}`;
           this.cachedArticle = combinedContent;
