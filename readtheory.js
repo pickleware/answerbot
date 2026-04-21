@@ -161,11 +161,10 @@
 
     createEl(tag, props = {}) {
       const el = document.createElement(tag);
-      Object.keys(props).forEach((k) => {
+      Object.keys(props).forEach(k => {
         if (k === "style") el.style.cssText = props.style;
         else if (k === "dataset") Object.assign(el.dataset, props.dataset);
-        else if (k === "children")
-          props.children.forEach((c) => el.appendChild(c));
+        else if (k === "children") props.children.forEach(c => el.appendChild(c));
         else if (k === "text") el.textContent = props.text;
         else if (k === "innerHTML") el.innerHTML = props.innerHTML;
         else el[k] = props[k];
