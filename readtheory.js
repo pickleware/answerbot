@@ -757,7 +757,7 @@
       const btn = document.getElementById("getAnswerButton");
       const spinner = document.getElementById("ah-spinner");
       const label = document.getElementById("getAnswerButtonText");
-      if (btn) btn.classList.add("running");
+      if (btn) { btn.classList.add("running"); console.log("[smArt] Button running mode ON"); }
       if (spinner) spinner.style.display = "block";
       if (label) label.textContent = "stop.";
       try {
@@ -1636,7 +1636,7 @@
           if (!this.isRunning) {
             this.isRunning = true;
             this._stoppedByWrite = false;
-            await this.startProcessUI();
+            await this.startProcessUI(); console.log("[smArt] UI started, loop active");
             try {
               this.setEyeToFull();
             } catch (e) {}
@@ -1664,7 +1664,7 @@
     }
 
     // -------- solver loop (uses settings & random MC) --------
-    async runSolverLoop() {
+    async runSolverLoop() { console.log("[smArt] runSolverLoop started");
       const attemptOnce = async (excludedAnswers = []) => {
         if (!this.isRunning) return false;
         try {
@@ -1904,4 +1904,3 @@
     new AssessmentHelper();
   } catch (e) {}
 })();
-
