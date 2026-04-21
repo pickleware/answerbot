@@ -509,6 +509,7 @@
           let questionContent = "";
           if (questionContainer)
             questionContent = questionContainer.firstChild.textContent.trim();
+            console.log(questionContent)
   
           const combinedContent = `${articleContent}\n\n${questionContent}`;
           this.cachedArticle = combinedContent;
