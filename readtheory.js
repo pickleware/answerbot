@@ -14,13 +14,14 @@
   class AssessmentHelper {
     constructor() {
       window.__AssessmentHelperInstance = this;
+      this.stoppedByWrite = false;
       this.answerIsDragging = false;
       this.answerInitialX = 0;
       this.answerInitialY = 0;
       this.cachedArticle = null;
       this.isRunning = false;
       this.currentAbortController = null;
-      this._stoppedByWrite = false;
+      this.stoppedByWrite = false;
       this.eyeState = "sleep";
       this.currentVideo = null;
 
@@ -621,7 +622,7 @@
 
         return "No answer available";
       } catch (err) {
-        if (err && err.name === "AbortError") return "<<ABORTED>>";
+        if (err && err.name === "AbortError") return "ABORTED";
         return `Error: ${err && err.message ? err.message : String(err)}`;
       }
     }
@@ -793,7 +794,7 @@
     }
 
     // -------- settings UI, flows with directional expansion and eye shrink --------
-    _computeExpandRight() {
+    computeExpandRight() {
       const launcher = document.getElementById("Launcher");
       if (!launcher) return true;
       const rect = launcher.getBoundingClientRect();
@@ -803,7 +804,7 @@
       return distanceToLeft <= distanceToRight;
     }
 
-    _setLauncherWidthAndAnchor(widthPx, expandRight) {
+    setLauncherWidthAndAnchor(widthPx, expandRight) {
       const launcher = document.getElementById("Launcher");
       if (!launcher) return;
       const rect = launcher.getBoundingClientRect();
@@ -821,7 +822,7 @@
       }
     }
 
-    _shrinkEyeToTopRight() {
+    shrinkEyeToTopRight() {
       const eye = document.getElementById("helperEye");
       if (!eye) return;
       // save original once
@@ -843,7 +844,7 @@
       if (img) img.style.width = "100%";
     }
 
-    _restoreEyeFromShrink() {
+    restoreEyeFromShrink() {
       const eye = document.getElementById("helperEye");
       if (!eye) return;
       if (this._eyeOriginal) {
@@ -921,11 +922,11 @@
       const btn = document.getElementById("getAnswerButton");
 
       // compute direction and set width to menu-size
-      const expandRight = this._computeExpandRight();
-      this._setLauncherWidthAndAnchor(360, expandRight);
+      const expandRight = this.computeExpandRight();
+      this.setLauncherWidthAndAnchor(360, expandRight);
 
       // shrink eye but keep visible at top-right
-      this._shrinkEyeToTopRight();
+      this.shrinkEyeToTopRight();
 
       // fade out main items except version & close & cog/back
       if (btn) {
@@ -958,8 +959,8 @@
 
     openMCSettings() {
       const panel = document.getElementById("settingsPanel");
-      const expandRight = this._computeExpandRight();
-      this._setLauncherWidthAndAnchor(520, expandRight);
+      const expandRight = this.computeExpandRight();
+      this.setLauncherWidthAndAnchor(520, expandRight);
       if (!panel) return;
       panel.innerHTML = "";
       this.settingsState = "mc";
@@ -1047,8 +1048,8 @@
 
     openWritingSettings() {
       const panel = document.getElementById("settingsPanel");
-      const expandRight = this._computeExpandRight();
-      this._setLauncherWidthAndAnchor(520, expandRight);
+      const expandRight = this.computeExpandRight();
+      this.setLauncherWidthAndAnchor(520, expandRight);
       this.settingsState = "writing";
       if (!panel) return;
       panel.innerHTML = "";
@@ -1238,8 +1239,8 @@
 
     openAISettings() {
       const panel = document.getElementById("settingsPanel");
-      const expandRight = this._computeExpandRight();
-      this._setLauncherWidthAndAnchor(520, expandRight);
+      const expandRight = this.computeExpandRight();
+      this.setLauncherWidthAndAnchor(520, expandRight);
       this.settingsState = "ai";
       if (!panel) return;
       panel.innerHTML = "";
@@ -1397,8 +1398,8 @@
         this.settingsState === "ai"
       ) {
         // shrink to menu view
-        const expandRight = this._computeExpandRight();
-        this._setLauncherWidthAndAnchor(360, expandRight);
+        const expandRight = this.computeExpandRight();
+        this.setLauncherWidthAndAnchor(360, expandRight);
         this.settingsState = "menu";
         this.buildSettingsMenu();
         return;
@@ -1426,11 +1427,11 @@
         }
         if (settingsCog) settingsCog.style.display = "block";
         // shrink launcher back (decide anchor based on current rect, restore to default 180)
-        const expandRight = this._computeExpandRight();
-        this._setLauncherWidthAndAnchor(180, expandRight);
+        const expandRight = this.computeExpandRight();
+        this.setLauncherWidthAndAnchor(180, expandRight);
         if (launcher) launcher.style.height = "240px";
         // restore eye full size & original placement
-        this._restoreEyeFromShrink();
+        this.restoreEyeFromShrink();
         this.settingsState = "closed";
         return;
       }
@@ -1635,7 +1636,7 @@
         getAnswerButton.addEventListener("click", async () => {
           if (!this.isRunning) {
             this.isRunning = true;
-            this._stoppedByWrite = false;
+            this.stoppedByWrite = false;
             await this.startProcessUI();
             try {
               this.setEyeToFull();
@@ -1760,7 +1761,7 @@
             if (options[index]) {
               options[index].click();
             } else {
-              if (answerContentEl) console.log(`Option ${normalized} not found on page.`);
+              if (answerContentEl) answerContentEl.textContent = `Option ${normalized} not found on page.`;
               return false;
             }
 
@@ -1769,6 +1770,11 @@
             const answerContentEl = answerContainerEl
               ? answerContainerEl.querySelector("#answerContent")
               : null;
+            if (answerContainerEl) {
+              answerContainerEl.style.display = "flex";
+              answerContainerEl.style.visibility = "visible";
+              answerContainerEl.classList.add("show");
+            }
             if (answerContentEl)
               answerContentEl.textContent =
                 normalized || (raw.trim().length ? raw.trim() : answer);
