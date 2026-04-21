@@ -495,11 +495,9 @@
   
       async fetchArticleContent() {
         try {
-          const titleElement = document.querySelector("h2.quiz-header-title");
           const articleContainer = document.querySelector("div.description-wrapper");
-          const questionContainer = document.querySelector(".student-quiz-page__question");
+          const questionContainer = document.querySelector('.student-quiz-page__question p');
       
-          const titleContent = titleElement ? titleElement.textContent.trim() : "";
       
           let articleContent = "";
           if (articleContainer) {
@@ -516,7 +514,7 @@
           }
       
           const combinedContent =
-            `${titleContent}\n\n${articleContent}\n\n${questionContent}`.trim();
+            `${articleContent}\n\n${questionContent}`.trim();
       
           this.cachedArticle = combinedContent;
           return combinedContent;
