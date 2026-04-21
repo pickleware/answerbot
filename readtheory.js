@@ -1721,6 +1721,7 @@
                     letters[Math.floor(Math.random() * letters.length)];
                 }
               } else {
+                console.log(letters)
                 chosenLetter =
                   letters[Math.floor(Math.random() * letters.length)];
               }
@@ -1743,12 +1744,25 @@
             if (!this.isRunning) return false;
 
             const raw = String(answer || "").trim().toUpperCase();
-            let normalized = "";
+            const match = raw.match(/\b([ABCD])\b/);
+            const normalized = match ? match[1] : null;
 
-            if (/^[ABCD]$/.test(raw)) {
-              normalized = raw;
-            } else if (/^\(?([ABCD])\)?[.)]?$/.test(raw)) {
-              normalized = raw.match(/[ABCD]/)[0];
+            if (answerContentEl) {
+              answerContentEl.textContent = normalized || raw || "No valid answer";
+            }
+
+            if (!normalized) {
+              return false;
+            }
+
+            const options = document.querySelectorAll('input[type="radio"]');
+            const index = normalized.charCodeAt(0) - 65;
+
+            if (options[index]) {
+              options[index].click();
+            } else {
+              if (answerContentEl) console.log(`Option ${normalized} not found on page.`);
+              return false;
             }
 
             const answerContainerEl =
