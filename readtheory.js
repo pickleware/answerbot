@@ -505,10 +505,10 @@
           }
   
           const questionContainer =
-            document.querySelector("div.student-quiz-page__question");
+            document.querySelector("student-quiz-page__question")
           let questionContent = "";
           if (questionContainer)
-            questionContent = questionContainer.textContent.trim();
+            questionContent = questionContainer.firstChild.textContent.trim();
   
           const combinedContent = `${articleContent}\n\n${questionContent}`;
           this.cachedArticle = combinedContent;
