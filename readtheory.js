@@ -511,6 +511,7 @@
           let questionContent = "";
           if (questionContainer) {
             questionContent = questionContainer.textContent.trim();
+            console.log(questionContent)
           }
       
           const combinedContent =
