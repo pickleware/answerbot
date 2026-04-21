@@ -495,7 +495,7 @@
   
       async fetchArticleContent() {
         try {
-          const articleContainer = document.querySelector("#start-reading");
+          const articleContainer = document.querySelector("div.description-wrapper");
           let articleContent = "";
           if (articleContainer) {
             const paragraphs = articleContainer.querySelectorAll("p");
@@ -505,29 +505,12 @@
           }
   
           const questionContainer =
-            document.querySelector("#activity-component-react") ||
-            document.querySelector("#question-text");
+            document.querySelector("div.student-quiz-page__question");
           let questionContent = "";
           if (questionContainer)
             questionContent = questionContainer.textContent.trim();
   
-          let writingQuestion = "";
-          try {
-            const xpath = '//*[@id="before-reading-thought"]/div[1]/p/div';
-            const result = document.evaluate(
-              xpath,
-              document,
-              null,
-              XPathResult.STRING_TYPE,
-              null
-            );
-            writingQuestion =
-              result && result.stringValue ? result.stringValue.trim() : "";
-          } catch (e) {
-            writingQuestion = "";
-          }
-  
-          const combinedContent = `${articleContent}\n\n${questionContent}\n\n${writingQuestion}`;
+          const combinedContent = `${articleContent}\n\n${questionContent}`;
           this.cachedArticle = combinedContent;
           return combinedContent;
         } catch (err) {
@@ -536,7 +519,7 @@
       }
   
       async fetchAnswer(queryContent, retryCount = 0) {
-        const MAX_RETRIES = 3,
+        const MAX_RETRIES = 2,
           RETRY_DELAY_MS = 1000;
   
         try {
